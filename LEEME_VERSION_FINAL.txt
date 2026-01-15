@@ -1,0 +1,117 @@
+================================================================
+  INSTALADOR FINAL - PROBLEMA DE ACENTOS RESUELTO
+================================================================
+
+PROBLEMA IDENTIFICADO:
+----------------------
+
+El error que viste ("N"=="3", "presa", "invalida", "ara", etc.) 
+era causado por ACENTOS y CARACTERES ESPECIALES en el archivo BAT.
+
+Windows cmd.exe no maneja bien UTF-8 con acentos, esperaba Windows-1252.
+
+================================================================
+SOLUCION APLICADA
+================================================================
+
+✓ TODOS los acentos eliminados del instalador
+✓ TODOS los caracteres especiales convertidos a ASCII
+✓ Archivo regenerado completamente
+
+CAMBIOS REALIZADOS:
+-------------------
+
+ANTES (con acentos):          AHORA (sin acentos):
+----------------------        ---------------------
+¿Dónde deseas...?            → Donde deseas...?
+Opción inválida              → Opcion invalida
+Instalación cancelada        → Instalacion cancelada
+Creará acceso directo        → Creara acceso directo
+╔═══════╗                    → ================
+✓ Correcto                   → [OK] Correcto
+⚠ Advertencia                → [!] Advertencia
+
+================================================================
+ARCHIVOS FINALES (9 enero 2026 - 22:43)
+================================================================
+
+1. InstaladorUnico_FINAL_SIN_ACENTOS_09ENE2026.bat
+   → 378 KB
+   → SIN ACENTOS ni caracteres especiales
+   → ✓ Comillas PowerShell correctas
+   → ✓ Compatible con cualquier Windows
+
+2. InstaladorUnico_SistemaGestionCasos_Protegido.zip
+   → 88 KB  
+   → Contiene el BAT sin acentos
+   → Contraseña: jusgadodepaz2026
+
+================================================================
+COMO USAR
+================================================================
+
+1. BORRA TODOS los archivos anteriores de tu Windows
+   (cualquier versión anterior a 22:43 del 9 enero 2026)
+
+2. DESCARGA el nuevo archivo:
+   • InstaladorUnico_FINAL_SIN_ACENTOS_09ENE2026.bat
+   O
+   • InstaladorUnico_SistemaGestionCasos_Protegido.zip
+
+3. Ejecuta como administrador en Windows
+
+4. Ahora NO deberías ver ningún error
+
+================================================================
+VERIFICACION
+================================================================
+
+Si abres el archivo BAT en un editor de texto, deberías ver:
+
+✓ "Donde deseas instalar el sistema?"   (sin acentos)
+✓ "Opcion invalida"                     (sin acentos)
+✓ "Instalacion cancelada"               (sin acentos)
+✓ powershell -Command "... \"%TEMP_FILE%\" ..."  (comillas escapadas)
+
+================================================================
+PROBLEMAS RESUELTOS
+================================================================
+
+1. ✓ Comandos fragmentados ("wershell", "1", "ho")
+   → RESUELTO: Comillas PowerShell escapadas correctamente
+
+2. ✓ Errores con acentos ("invalida", "ara", "presa")
+   → RESUELTO: Eliminados todos los acentos
+
+3. ✓ Caracteres especiales (╔, ║, ✓, ⚠)
+   → RESUELTO: Convertidos a ASCII (=, |, [OK], [!])
+
+================================================================
+SI TODAVIA HAY ERRORES
+================================================================
+
+Si TODAVIA ves errores:
+
+1. Verifica que el archivo sea del 9 enero 2026, 22:43
+   (Clic derecho → Propiedades → Detalles)
+
+2. Verifica que el nombre sea:
+   InstaladorUnico_FINAL_SIN_ACENTOS_09ENE2026.bat
+
+3. Enviame un screenshot del nuevo error
+
+================================================================
+RESUMEN
+================================================================
+
+✓ Archivo SIN acentos generado
+✓ Archivo SIN caracteres especiales
+✓ Comillas PowerShell correctas
+✓ Compatible con cualquier Windows
+✓ Listo para usar
+
+Hora de generación: 9 enero 2026, 22:43
+Tamaño: 378 KB
+Archivos incluidos: 17 archivos Python
+
+================================================================

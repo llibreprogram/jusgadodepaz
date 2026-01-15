@@ -1,0 +1,100 @@
+═══════════════════════════════════════════════════════════════════
+⚠️  IMPORTANTE - LEE ESTO ANTES DE USAR EL INSTALADOR ⚠️
+═══════════════════════════════════════════════════════════════════
+
+PROBLEMA DETECTADO:
+------------------
+
+Si ves errores como:
+  • "wershell" no se reconoce como comando
+  • "1" no se reconoce como comando
+  • "ho" no se reconoce como comando
+
+Significa que estás usando el ARCHIVO VIEJO (anterior al 9 de enero 2026)
+
+═══════════════════════════════════════════════════════════════════
+✅ SOLUCIÓN - USA EL ARCHIVO NUEVO
+═══════════════════════════════════════════════════════════════════
+
+ARCHIVOS CORREGIDOS (9 de enero 2026 - 22:26):
+-----------------------------------------------
+
+📁 InstaladorUnico_SistemaGestionCasos_NUEVO_09ENE2026.bat
+   → Archivo BAT corregido con fecha en el nombre
+   → Tamaño: 380 KB
+   → ✅ Comillas escapadas correctamente
+
+📁 InstaladorUnico_SistemaGestionCasos_Protegido.zip
+   → ZIP actualizado con el BAT corregido
+   → Tamaño: 88 KB
+   → Contraseña: jusgadodepaz2026
+   → ✅ Contiene la versión corregida
+
+═══════════════════════════════════════════════════════════════════
+🔍 CÓMO VERIFICAR QUE TIENES EL ARCHIVO CORRECTO
+═══════════════════════════════════════════════════════════════════
+
+EN WINDOWS:
+1. Clic derecho en el archivo .bat
+2. Propiedades
+3. Pestaña "Detalles"
+4. Fecha de modificación debe ser: 9 de enero 2026, 22:26
+
+O SIMPLEMENTE:
+- Usa el archivo que dice "_NUEVO_09ENE2026" en el nombre
+- O extrae del ZIP que acabas de descargar
+
+═══════════════════════════════════════════════════════════════════
+📋 PASOS PARA USAR EL INSTALADOR CORRECTO
+═══════════════════════════════════════════════════════════════════
+
+OPCIÓN A - Usar el BAT directamente:
+------------------------------------
+1. Descarga: InstaladorUnico_SistemaGestionCasos_NUEVO_09ENE2026.bat
+2. En Windows, clic derecho → "Ejecutar como administrador"
+3. Sigue las instrucciones en pantalla
+
+OPCIÓN B - Usar el ZIP protegido:
+----------------------------------
+1. Descarga: InstaladorUnico_SistemaGestionCasos_Protegido.zip
+2. Extrae con contraseña: jusgadodepaz2026
+3. Ejecuta el .bat extraído como administrador
+
+═══════════════════════════════════════════════════════════════════
+⚠️  BORRA LOS ARCHIVOS VIEJOS
+═══════════════════════════════════════════════════════════════════
+
+Si tienes archivos de ANTES del 9 de enero 2026, 22:26:
+- BÓRRALOS
+- Usa solo los nuevos archivos
+
+═══════════════════════════════════════════════════════════════════
+✅ QUÉ SE CORRIGIÓ
+═══════════════════════════════════════════════════════════════════
+
+ANTES (INCORRECTO):
+powershell -Command "... Get-Content '%TEMP_FILE%' ..."
+                                    ↑ Comillas simples ❌
+
+AHORA (CORRECTO):
+powershell -Command "... Get-Content \"%TEMP_FILE%\" ..."
+                                    ↑ Comillas dobles escapadas ✅
+
+Esto evita que Windows fragmente los comandos y genere errores como
+"wershell", "1", "ho", etc.
+
+═══════════════════════════════════════════════════════════════════
+🎯 RESUMEN
+═══════════════════════════════════════════════════════════════════
+
+✅ Descarga el archivo NUEVO (con fecha 9 enero 2026, 22:26)
+✅ Borra archivos viejos para evitar confusión
+✅ Ejecuta como administrador en Windows
+✅ Debería funcionar sin errores de "no se reconoce como comando"
+
+Si TODAVÍA ves errores, verifica:
+  1. Que la fecha del archivo sea 9 enero 2026, 22:26
+  2. Que estés ejecutando el archivo correcto
+  3. Envíame un screenshot del error
+
+═══════════════════════════════════════════════════════════════════

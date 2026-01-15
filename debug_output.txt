@@ -1,0 +1,154 @@
+✓ Respaldo automático creado: backups/auto_backup_20251229_233713.db
+
+=== _populate_table DEBUG ===
+Total cases recibidos: 160
+items_per_page: 50
+current_page: 1
+total_pages calculadas: 4
+start_idx: 0, end_idx: 50
+page_cases length: 50
+table.setRowCount llamado con: 50
+
+=== search_cases LLAMADO ===
+
+=== _filter_cases LLAMADO ===
+Total casos en BD: 160
+Categoría seleccionada: 'Pensión alimentaria (todas)'
+Casos filtrados: 0
+
+=== _populate_table DEBUG ===
+Total cases recibidos: 0
+items_per_page: 50
+current_page: 1
+total_pages calculadas: 1
+start_idx: 0, end_idx: 0
+page_cases length: 0
+table.setRowCount llamado con: 0
+
+=== search_cases LLAMADO ===
+
+=== _filter_cases LLAMADO ===
+Total casos en BD: 160
+Categoría seleccionada: 'Pensión alimentaria (todas)'
+Casos filtrados: 0
+
+=== _populate_table DEBUG ===
+Total cases recibidos: 0
+items_per_page: 50
+current_page: 1
+total_pages calculadas: 1
+start_idx: 0, end_idx: 0
+page_cases length: 0
+table.setRowCount llamado con: 0
+
+=== search_cases LLAMADO ===
+
+=== _filter_cases LLAMADO ===
+Total casos en BD: 160
+Categoría seleccionada: 'Tránsito (todas)'
+Casos filtrados: 0
+
+=== _populate_table DEBUG ===
+Total cases recibidos: 0
+items_per_page: 50
+current_page: 1
+total_pages calculadas: 1
+start_idx: 0, end_idx: 0
+page_cases length: 0
+table.setRowCount llamado con: 0
+
+=== search_cases LLAMADO ===
+
+=== _filter_cases LLAMADO ===
+Total casos en BD: 160
+Categoría seleccionada: 'Tránsito (todas)'
+Casos filtrados: 0
+
+=== _populate_table DEBUG ===
+Total cases recibidos: 0
+items_per_page: 50
+current_page: 1
+total_pages calculadas: 1
+start_idx: 0, end_idx: 0
+page_cases length: 0
+table.setRowCount llamado con: 0
+
+=== search_cases LLAMADO ===
+
+=== _filter_cases LLAMADO ===
+Total casos en BD: 160
+Categoría seleccionada: 'Tránsito (todas)'
+Casos filtrados: 0
+
+=== _populate_table DEBUG ===
+Total cases recibidos: 0
+items_per_page: 50
+current_page: 1
+total_pages calculadas: 1
+start_idx: 0, end_idx: 0
+page_cases length: 0
+table.setRowCount llamado con: 0
+
+=== search_cases LLAMADO ===
+
+=== _filter_cases LLAMADO ===
+Total casos en BD: 160
+Categoría seleccionada: 'Todas'
+Casos filtrados: 0
+
+=== _populate_table DEBUG ===
+Total cases recibidos: 0
+items_per_page: 50
+current_page: 1
+total_pages calculadas: 1
+start_idx: 0, end_idx: 0
+page_cases length: 0
+table.setRowCount llamado con: 0
+
+=== search_cases LLAMADO ===
+
+=== _filter_cases LLAMADO ===
+Total casos en BD: 160
+Categoría seleccionada: 'Todas'
+Casos filtrados: 0
+
+=== _populate_table DEBUG ===
+Total cases recibidos: 0
+items_per_page: 50
+current_page: 1
+total_pages calculadas: 1
+start_idx: 0, end_idx: 0
+page_cases length: 0
+table.setRowCount llamado con: 0
+
+=== search_cases LLAMADO ===
+
+=== _filter_cases LLAMADO ===
+Total casos en BD: 160
+Categoría seleccionada: 'Todas'
+Casos filtrados: 0
+
+=== _populate_table DEBUG ===
+Total cases recibidos: 0
+items_per_page: 50
+current_page: 1
+total_pages calculadas: 1
+start_idx: 0, end_idx: 0
+page_cases length: 0
+table.setRowCount llamado con: 0
+
+=== search_cases LLAMADO ===
+
+=== _filter_cases LLAMADO ===
+Total casos en BD: 160
+Categoría seleccionada: 'Todas'
+Casos filtrados: 0
+
+=== _populate_table DEBUG ===
+Total cases recibidos: 0
+items_per_page: 50
+current_page: 1
+total_pages calculadas: 1
+start_idx: 0, end_idx: 0
+page_cases length: 0
+table.setRowCount llamado con: 0

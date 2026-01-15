@@ -1,0 +1,6 @@
+numero_carpeta,categoria,etapa_procesal,victima,investigado,fecha_denuncia,fecha_formalizacion,fecha_acusacion,fecha_sentencia,fecha_archivo,monto_reparacion,estado_actual,resultado,apelacion,fiscal_asignado
+RUC-2025-001-TEST,Delitos contra la propiedad,Investigación,Carlos Rodríguez,Luis Martínez,2025-01-15,,,,,5000,Investigación,,0,Fiscal González
+RUC-2025-002-TEST,Delitos contra la persona,Formalizado,Ana López,Pedro Sánchez,2025-02-20,2025-03-05,,,,,0,Formalizado,,0,Fiscal Ramírez
+RUC-2025-003-TEST,Delitos sexuales,En juicio,María Torres,Juan Castro,2024-11-10,2024-12-01,2025-01-05,,,,,En juicio,,0,Fiscal Hernández
+RUC-2025-004-TEST,Robo simple,Sentencia,Jorge Díaz,Roberto Flores,2024-08-15,2024-09-20,2024-10-30,2025-01-15,,15000,Sentencia,Condena,1,Fiscal González
+RUC-2025-005-TEST,Estafa,Archivo provisional,Laura Vega,Carlos Mora,2024-12-01,,,,,8000,Archivo provisional,Archivo,0,Fiscal Ramírez
