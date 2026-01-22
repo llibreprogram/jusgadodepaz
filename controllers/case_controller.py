@@ -242,6 +242,7 @@ class CaseController:
             fiscal_inicial,
             departamento_actual,
             fiscal_cierre,
+            monto_pension,
         ) = case_data
 
         if not numero_carpeta or not numero_carpeta.strip():

@@ -1085,6 +1085,9 @@ class MainWindow(QMainWindow):
             self.clear_form()
             self.load_cases()
             self.setup_autocompleters()  # Refresh autocompleters with new data
+            
+            # Auto-refresh dashboard silently
+            self.refresh_dashboard(silent=True)
         except Exception as e:
             self._show_error_box(f'Error al guardar: {type(e).__name__}: {repr(e)}')
 
@@ -1697,6 +1700,9 @@ class MainWindow(QMainWindow):
                 QMessageBox.information(self, 'Éxito', 'Carpeta eliminada.')
                 self.load_cases()
                 self.setup_autocompleters()  # Refresh autocompleters after deletion
+                
+                # Auto-refresh dashboard silently
+                self.refresh_dashboard(silent=True)
             except Exception as e:
                 QMessageBox.warning(self, 'Error', f'No se pudo eliminar: {str(e)}')
 
@@ -2408,13 +2414,29 @@ class MainWindow(QMainWindow):
         except:
             return 'Desconocido'
     
-    def refresh_dashboard(self):
+    def refresh_dashboard(self, silent=False):
         """Refresh dashboard data"""
         try:
-            # Remove old stats card
+            # Get dashboard tab - index 2
             tab = self.tabs.widget(2)  # Dashboard tab is index 2
             if tab:
-                layout = tab.layout()
+                # The tab is wrapped in a QScrollArea, so we need to get the internal widget
+                if isinstance(tab, QScrollArea):
+                    content_widget = tab.widget()
+                    if content_widget:
+                        layout = content_widget.layout()
+                    else:
+                        layout = None
+                else:
+                    layout = tab.layout()
+                
+                if layout is None:
+                    # Si no hay layout es posible que aún no se haya inicializado o haya un error
+                    # Loggeamos y salimos silenciosamente si es actualización automática
+                    if not silent:
+                        print("Advertencia: El tab del dashboard no tiene un layout válido")
+                    return
+                
                 # Remove old cards and recreate
                 for i in reversed(range(layout.count())):
                     item = layout.itemAt(i)
@@ -2428,7 +2450,8 @@ class MainWindow(QMainWindow):
                 layout.insertWidget(2, self._create_upcoming_hearings_card())
                 layout.insertWidget(3, self._create_recent_activity_card())
             
-            QMessageBox.information(self, 'Actualizado', 'Dashboard actualizado exitosamente.')
+            if not silent:
+                QMessageBox.information(self, 'Actualizado', 'Dashboard actualizado exitosamente.')
         except Exception as e:
             self._show_error_box(f'Error al actualizar dashboard: {str(e)}')
 
