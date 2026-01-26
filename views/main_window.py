@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
     QProgressBar, QScrollArea, QGridLayout
 )
 from PyQt6.QtCore import QDate, Qt, QEvent, QSize
-from PyQt6.QtGui import QKeySequence, QShortcut, QFont, QFontMetrics
+from PyQt6.QtGui import QKeySequence, QShortcut, QFont, QFontMetrics, QColor
 from controllers.case_controller import CaseController
 from utils.graph_utils import GraphUtils
 from utils.export_service import ExportService
@@ -18,6 +18,7 @@ from utils.notification_manager import NotificationManager
 from utils.import_service import ImportService
 from services.document_service import DocumentService
 from utils.responsive_utils import get_responsive_helper, scale, scale_font, spacing, margins
+from views.timeline_dialog import TimelineDialog
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -36,13 +37,13 @@ class MainWindow(QMainWindow):
         self.categories = [
             # PENSIÓN ALIMENTARIA
             'Pensión alimentaria',
+            'Incumplimiento de pensiones alimenticia',
             'Acuerdo homologado de pensión',
             'Desistimiento de pensión',
-            'Conciliación de pensión',
             'No acuerdo de pensión',
             'Condena de pensión',
             # TRÁNSITO
-            'Tránsito - Daño a propiedad',
+            'Tránsito',
             'Desistimiento de tránsito',
             'Conciliación de tránsito',
             'Condena de tránsito',
@@ -50,13 +51,12 @@ class MainWindow(QMainWindow):
             'Auto no a lugar - Tránsito',
             # OTROS CASOS
             'Violación a la propiedad',
-            'Riña penal',
+            'Conflicto social',
             'Penal laboral',
             'Medidas de protección',
             'Daño a la propiedad',
-            'Conciliación de riña',
             'Conciliación de daño a propiedad',
-            'No acuerdo de daño a propiedad',
+            'No acuerdo',
             'Archivo',
             'Otros'
         ]
@@ -64,8 +64,8 @@ class MainWindow(QMainWindow):
         self.current_edit_id = None
         self.filter_etapas = [
             'Todas',
+            'Denuncia',
             'Investigación',
-            'Formalizado',
             'Acusación presentada',
             'En juicio',
             'Archivo provisional',
@@ -626,7 +626,7 @@ class MainWindow(QMainWindow):
         lbl = QLabel('Etapa procesal')
         lbl.setStyleSheet(label_style)
         self.etapa_procesal = QComboBox()
-        self.etapa_procesal.addItems(['Investigación', 'Formalizado', 'Acusación presentada', 'En juicio', 'Archivo provisional', 'Archivo definitivo', 'Sobreseimiento'])
+        self.etapa_procesal.addItems(['Denuncia', 'Investigación', 'Acusación presentada', 'En juicio', 'Archivo provisional', 'Archivo definitivo', 'Sobreseimiento'])
         self.etapa_procesal.setMinimumHeight(32)
         self.etapa_procesal.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         form.addRow(lbl, self.etapa_procesal)
@@ -644,6 +644,14 @@ class MainWindow(QMainWindow):
         self.victima.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         form.addRow(lbl, self.victima)
 
+        lbl = QLabel('Cédula Víctima')
+        lbl.setStyleSheet(label_style)
+        self.cedula_victima = QLineEdit()
+        self.cedula_victima.setPlaceholderText('Cédula de la víctima')
+        self.cedula_victima.setMinimumHeight(32)
+        self.cedula_victima.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        form.addRow(lbl, self.cedula_victima)
+
         lbl = QLabel('Investigado')
         lbl.setStyleSheet(label_style)
         self.investigado = QLineEdit()
@@ -651,6 +659,14 @@ class MainWindow(QMainWindow):
         self.investigado.setMinimumHeight(32)
         self.investigado.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         form.addRow(lbl, self.investigado)
+
+        lbl = QLabel('Cédula Investigado')
+        lbl.setStyleSheet(label_style)
+        self.cedula_investigado = QLineEdit()
+        self.cedula_investigado.setPlaceholderText('Cédula del investigado')
+        self.cedula_investigado.setMinimumHeight(32)
+        self.cedula_investigado.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        form.addRow(lbl, self.cedula_investigado)
 
         # Section: FISCALES
         section_fiscales = QLabel('━━━━ FISCALES ━━━━')
@@ -816,7 +832,7 @@ class MainWindow(QMainWindow):
         lbl = QLabel('Estado Actual')
         lbl.setStyleSheet(label_style)
         self.estado_actual = QComboBox()
-        self.estado_actual.addItems(['Investigación', 'Formalizado', 'Acusación presentada', 'En juicio', 'Archivo provisional', 'Archivo definitivo', 'Sobreseimiento', 'Sentencia'])
+        self.estado_actual.addItems(['Denuncia', 'Investigación', 'Acusación presentada', 'En juicio', 'Archivo provisional', 'Archivo definitivo', 'Sobreseimiento', 'Sentencia'])
         self.estado_actual.setMinimumHeight(32)
         self.estado_actual.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         form.addRow(lbl, self.estado_actual)
@@ -1072,7 +1088,9 @@ class MainWindow(QMainWindow):
                 self.fiscal_inicial.text(),
                 self.departamento_actual.currentText(),
                 self.fiscal_cierre.text(),
-                float(self.monto_pension.text() or 0)
+                float(self.monto_pension.text() or 0),
+                self.cedula_victima.text(),
+                self.cedula_investigado.text()
             )
 
             if self.current_edit_id:
@@ -1105,7 +1123,9 @@ class MainWindow(QMainWindow):
         self.categoria_custom.clear()
         self.categoria_custom.hide()
         self.victima.clear()
+        self.cedula_victima.clear()
         self.investigado.clear()
+        self.cedula_investigado.clear()
         self.monto_pension.clear()
         self.resultado.setCurrentIndex(0)
         self.apelacion.setChecked(False)
@@ -1345,9 +1365,15 @@ class MainWindow(QMainWindow):
         delete_button = QPushButton('🗑️ Eliminar')
         delete_button.clicked.connect(self.delete_selected)
         delete_button.setMinimumHeight(40)
+        timeline_button = QPushButton('📜 Cronología')
+        timeline_button.clicked.connect(self.open_timeline_dialog)
+        timeline_button.setStyleSheet("background: #8b5cf6;")
+        timeline_button.setMinimumHeight(40)
+        
         actions_layout.addWidget(refresh_button)
         actions_layout.addWidget(edit_button)
         actions_layout.addWidget(docs_button)
+        actions_layout.addWidget(timeline_button)
         actions_layout.addWidget(delete_button)
         layout.addLayout(actions_layout)
 
@@ -1368,15 +1394,28 @@ class MainWindow(QMainWindow):
         self.filter_apelados.stateChanged.connect(self.search_cases)
 
     def load_cases(self):
-        # Invalidate cache to force fresh data from database
-        self.controller.invalidate_caches()
-        cases = self.controller.get_all_cases()
-        self.filtered_cases = cases
-        self.current_page = 1
-        self._populate_table(cases)
-        # Refresh export case list
-        if hasattr(self, 'export_case_combo'):
-            self.refresh_export_case_list()
+        try:
+            # Show waiting cursor
+            QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+            
+            # Invalidate cache to force fresh data from database
+            self.controller.invalidate_caches()
+            cases = self.controller.get_all_cases()
+            self.filtered_cases = cases
+            self.current_page = 1
+            
+            # Disable table updates during populaion
+            self.table.setUpdatesEnabled(False)
+            self._populate_table(cases)
+            self.table.setUpdatesEnabled(True)
+            
+            # Refresh export case list (optimized)
+            if hasattr(self, 'export_case_combo'):
+                self.refresh_export_case_list()
+        except Exception as e:
+            self._show_error_box(f'Error al actualizar tabla: {str(e)}')
+        finally:
+            QApplication.restoreOverrideCursor()
 
     def _populate_table(self, cases):
         # Calculate pagination
@@ -1607,7 +1646,9 @@ class MainWindow(QMainWindow):
             self.etapa_procesal.setCurrentIndex(0)
         
         self.victima.setText(get_value(case, 'victima', ''))
+        self.cedula_victima.setText(get_value(case, 'cedula_victima', ''))
         self.investigado.setText(get_value(case, 'investigado', ''))
+        self.cedula_investigado.setText(get_value(case, 'cedula_investigado', ''))
 
         def set_date(widget, value):
             if value:
@@ -2848,6 +2889,19 @@ class MainWindow(QMainWindow):
         except Exception as e:
             self._show_error_box(f'Error al exportar estadísticas completas: {str(e)}')
     
+    def open_timeline_dialog(self):
+        """Open the timeline and history dialog for the selected case"""
+        try:
+            case_id = self.get_selected_case_id()
+            if case_id is None:
+                QMessageBox.information(self, 'Seleccionar', 'Seleccione una fila para ver la cronología.')
+                return
+                
+            dialog = TimelineDialog(self, self.controller, case_id)
+            dialog.exec()
+        except Exception as e:
+            self._show_error_box(f'Error al abrir cronología: {str(e)}')
+
     def create_manual_backup(self):
         """Create manual database backup"""
         try:
@@ -2862,20 +2916,40 @@ class MainWindow(QMainWindow):
     def refresh_export_case_list(self):
         """Refresh the list of cases in the export combo box"""
         try:
+            self.export_case_combo.blockSignals(True)
+            self.export_case_combo.view().setUpdatesEnabled(False)
             self.export_case_combo.clear()
-            cases = self.controller.get_all_cases()
+            
+            # Use cached cases if available, otherwise get from controller
+            if hasattr(self, 'filtered_cases') and self.filtered_cases:
+                cases = self.filtered_cases
+            else:
+                cases = self.controller.get_all_cases()
             
             if not cases:
                 self.export_case_combo.addItem('No hay casos disponibles')
                 return
             
-            # Add cases to combo box with format: "Caso #123 - Víctima vs Investigado"
-            for case in cases:
+            # Limit combobox items if too many to prevent UI freeze
+            MAX_ITEMS = 2000
+            if len(cases) > MAX_ITEMS:
+                self.export_case_combo.addItem(f'⚠️ Mostrando primeros {MAX_ITEMS} de {len(cases)} casos')
+                display_cases = cases[:MAX_ITEMS]
+            else:
+                display_cases = cases
+
+            # Optimización: Agregar todos los items de una vez si fuera posible,
+            # pero QComboBox no tiene addItems con userData.
+            # Sin embargo, al bloquear señales y updates es mucho más rápido.
+            for case in display_cases:
                 display_text = f"Caso #{case.numero_carpeta} - {case.victima} vs {case.investigado}"
                 self.export_case_combo.addItem(display_text, case.id)
                 
         except Exception as e:
             print(f"Error refreshing export case list: {str(e)}")
+        finally:
+            self.export_case_combo.view().setUpdatesEnabled(True)
+            self.export_case_combo.blockSignals(False)
     
     def export_single_case(self, format):
         """Export a single selected case"""
@@ -3632,16 +3706,14 @@ class MainWindow(QMainWindow):
         if case_id is None:
             QMessageBox.information(self, 'Seleccionar', 'Seleccione un caso para ver sus documentos.')
             return
-        
+
         # Get case info
         cases = self.controller.get_all_cases()
         case = next((c for c in cases if c.id == case_id), None)
         if not case:
             return
-        
+
         # Create dialog
-        from PyQt6.QtWidgets import QDialog, QDialogButtonBox
-        
         dialog = QDialog(self)
         dialog.setWindowTitle(f'Documentos - {case.numero_carpeta}')
         dialog.setMinimumSize(800, 600)
@@ -3656,6 +3728,7 @@ class MainWindow(QMainWindow):
         
         case_info = QLabel(f'{case.categoria} • {case.victima} vs {case.investigado}')
         case_info.setStyleSheet('font-size: 13px; color: #94a3b8; margin-bottom: 12px;')
+
         layout.addWidget(case_info)
         
         # Documents table
@@ -3868,6 +3941,19 @@ class MainWindow(QMainWindow):
             parent=self
         )
         dialog.exec()
+
+    def closeEvent(self, event):
+        """Handle application closure"""
+        reply = QMessageBox.question(self, 'Salir', 
+                                   '¿Estás seguro de que deseas salir?',
+                                   QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, 
+                                   QMessageBox.StandardButton.No)
+
+        if reply == QMessageBox.StandardButton.Yes:
+            event.accept()
+            QApplication.quit()  # Explicitly quit the application
+        else:
+            event.ignore()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

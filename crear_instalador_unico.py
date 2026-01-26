@@ -26,6 +26,7 @@ FILES_TO_INCLUDE = [
     'views/main_window.py',
     'views/fiscal_history_dialog.py',
     'views/fiscal_stats_dialog.py',
+    'views/timeline_dialog.py',
     # Services
     'services/document_service.py',
     # Utils

@@ -16,6 +16,7 @@ from PyQt6.QtWidgets import QApplication, QMessageBox
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    app.setQuitOnLastWindowClosed(False)  # Prevent app from closing when dialogs are closed
     
     # Create automatic backup on startup (skip if first run)
     try:

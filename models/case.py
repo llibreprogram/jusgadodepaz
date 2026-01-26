@@ -8,6 +8,7 @@ class Case:
                  fecha_cumplimiento_orden=None, observaciones_orden=None, origen_orden_arresto=None,
                  fiscal_inicial=None, departamento_actual=None, fiscal_cierre=None,
                  monto_pension=None,
+                 cedula_victima=None, cedula_investigado=None,
                  id=None, created_at=None, updated_at=None):
         self.id = id
         self.numero_carpeta = numero_carpeta
@@ -39,6 +40,8 @@ class Case:
         self.departamento_actual = departamento_actual
         self.fiscal_cierre = fiscal_cierre
         self.monto_pension = monto_pension
+        self.cedula_victima = cedula_victima
+        self.cedula_investigado = cedula_investigado
         self.created_at = created_at
         self.updated_at = updated_at
 
@@ -73,12 +76,14 @@ class Case:
             self.departamento_actual,
             self.fiscal_cierre,
             self.monto_pension,
+            self.cedula_victima,
+            self.cedula_investigado,
         )
 
     @staticmethod
     def from_row(row):
         # Handle both old schema and new schema with citations and fiscal tracking
-        if len(row) >= 32:  # New schema with monto_pension (29 fields + id + created/updated)
+        if len(row) >= 34:  # New schema with cedulas (31 fields + id + created/updated)
             return Case(
                 numero_carpeta=row[1],
                 categoria=row[2],
@@ -109,11 +114,13 @@ class Case:
                 departamento_actual=row[27] if len(row) > 27 else None,
                 fiscal_cierre=row[28] if len(row) > 28 else None,
                 monto_pension=row[29] if len(row) > 29 else None,
+                cedula_victima=row[30] if len(row) > 30 else None,
+                cedula_investigado=row[31] if len(row) > 31 else None,
                 id=row[0],
-                created_at=row[30] if len(row) > 30 else None,
-                updated_at=row[31] if len(row) > 31 else None
+                created_at=row[32] if len(row) > 32 else None,
+                updated_at=row[33] if len(row) > 33 else None
             )
-        elif len(row) >= 31:  # Schema with fiscal fields but without monto_pension
+        elif len(row) >= 32:  # Schema with monto_pension (29 fields + id + created/updated)
             return Case(
                 numero_carpeta=row[1],
                 categoria=row[2],

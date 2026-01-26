@@ -243,6 +243,8 @@ class CaseController:
             departamento_actual,
             fiscal_cierre,
             monto_pension,
+            cedula_victima,
+            cedula_investigado,
         ) = case_data
 
         if not numero_carpeta or not numero_carpeta.strip():
@@ -283,5 +285,21 @@ class CaseController:
         df = pd.DataFrame([vars(c) for c in data])
         if format == 'csv':
             df.to_csv(filepath, index=False)
-        elif format == 'excel':
             df.to_excel(filepath, index=False)
+
+    # Timeline Methods
+    def add_event(self, case_id, event_type, description, event_date):
+        """Add a new event to the case timeline"""
+        try:
+            return self.db.insert_event((case_id, event_type, description, event_date))
+        except Exception as e:
+            print(f"Error adding event: {e}")
+            raise e
+
+    def get_case_events(self, case_id):
+        """Get all events for a case"""
+        try:
+            return self.db.get_case_events(case_id)
+        except Exception as e:
+            print(f"Error getting events: {e}")
+            return []

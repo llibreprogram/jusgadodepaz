@@ -98,9 +98,13 @@ class Database:
                 # Migrate existing data: fiscal_asignado becomes fiscal_inicial and fiscal_actual
                 cursor.execute("UPDATE cases SET fiscal_inicial = fiscal_asignado WHERE fiscal_inicial IS NULL")
             
-            # Add monto_pension column if it doesn't exist
             if cols and 'monto_pension' not in cols:
                 cursor.execute("ALTER TABLE cases ADD COLUMN monto_pension REAL")
+
+            # Add cedula columns if they don't exist
+            if cols and 'cedula_victima' not in cols:
+                cursor.execute("ALTER TABLE cases ADD COLUMN cedula_victima TEXT")
+                cursor.execute("ALTER TABLE cases ADD COLUMN cedula_investigado TEXT")
             
             if not cols:
                 # Table doesn't exist, create with full schema
@@ -135,7 +139,10 @@ class Database:
                         fiscal_inicial TEXT,
                         departamento_actual TEXT,
                         fiscal_cierre TEXT,
+                        fiscal_cierre TEXT,
                         monto_pension REAL,
+                        cedula_victima TEXT,
+                        cedula_investigado TEXT,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
@@ -158,6 +165,19 @@ class Database:
                     FOREIGN KEY (caso_id) REFERENCES cases(id) ON DELETE CASCADE
                 )
             ''')
+            
+            # Create case events table (Timeline)
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS case_events (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    case_id INTEGER NOT NULL,
+                    event_type TEXT NOT NULL,
+                    description TEXT,
+                    event_date TEXT NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (case_id) REFERENCES cases(id) ON DELETE CASCADE
+                )
+            ''')
 
     def insert_case(self, case_data):
         with self.transaction() as cursor:
@@ -170,8 +190,9 @@ class Database:
                     estado_citacion, observaciones_citacion, tiene_orden_arresto, fecha_emision_orden, 
                     estado_orden, fecha_cumplimiento_orden, observaciones_orden, origen_orden_arresto,
                     fiscal_inicial, departamento_actual, fiscal_cierre, monto_pension,
+                    cedula_victima, cedula_investigado,
                     created_at, updated_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
             ''', case_data)
             return cursor.lastrowid
 
@@ -208,6 +229,8 @@ class Database:
                     departamento_actual = ?,
                     fiscal_cierre = ?,
                     monto_pension = ?,
+                    cedula_victima = ?,
+                    cedula_investigado = ?,
                     updated_at = CURRENT_TIMESTAMP
                 WHERE id = ?
             ''', (*case_data, case_id))
@@ -324,3 +347,25 @@ class Database:
         stats['declinaciones_entrada'] = dict(cursor.fetchall())
         
         return stats
+
+    # Timeline / Events Methods
+    def insert_event(self, event_data):
+        """Insert a new event into the case timeline"""
+        with self.transaction() as cursor:
+            cursor.execute('''
+                INSERT INTO case_events (
+                    case_id, event_type, description, event_date
+                ) VALUES (?, ?, ?, ?)
+            ''', event_data)
+            return cursor.lastrowid
+
+    def get_case_events(self, case_id):
+        """Get all events for a specific case, ordered by date"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute('''
+            SELECT * FROM case_events 
+            WHERE case_id = ? 
+            ORDER BY event_date DESC, created_at DESC
+        ''', (case_id,))
+        return cursor.fetchall()
